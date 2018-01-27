@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Guessing the Number Game! - Bruna Garcia</title>
+  <!-- Bootstrap -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <!-- js -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <!-- Bundle js -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" integrity="sha384-feJI7QwhOS+hwpX2zkaeJQjeiwlhOP+SdQDqhgvvo1DsjtiSQByFdThsxO669S2D"
+    crossorigin="anonymous"></script>
+  <!-- My CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+  <script>
+      //0 - Get user Name
+      function getUserName() {
+        let name = prompt('What is your name?');
+        console.log('get user name check');
+        alert('Hello ' + name + "! Let's play a guessing game.");
+        return name;
+      }
+
+
+      //1 - get max number from user
+      function getMaxFromUser() {
+        maxGuess = prompt('Choose the maximum range of the guess?');
+
+        return Number(maxGuess);
+      }
+
+
+
+      //2 - Generate random number with base on userMax
+      function generateRandomNumber(max, min) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+
+
+      //3 - Get user guess
+      function getGuessFromUser() {
+        let userGuess = prompt('Choose a number between 1 to ' + maxGuess + '?');
+        console.log('Get initial guess ' + userGuess + ' check');
+        return Number(userGuess);
+      }
+
+
+
+      //4 - Check Guess value
+      function isGuessCorrect(goal, guess) {
+
+        if (goal === guess) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      //----> Starting game function
+      function startGame() {
+        let min = 1;
+
+        //declare variables to call the functions:
+        let maxTry = 5;
+        let name = getUserName();
+        let maxGuess = getMaxFromUser();
+        let goal = generateRandomNumber(maxGuess, min);
+        let userGuess = getGuessFromUser();
+        let guessCheck = isGuessCorrect(goal, userGuess);
+
+        //Matching goal x guess
+        for (i = 0; i < maxTry; i++) {
+          guessCheck = isGuessCorrect(goal, userGuess);
+          if (goal < userGuess) {
+            userGuess = prompt('Too high, try another number');
+
+          } else if (userGuess == 0) {
+            alert("You try 0 and it's not valid. Play again!");
+            return;
+          } else if (goal > userGuess) {
+            userGuess = prompt('Too low, try another number!');
+
+          } else {
+            alert('You just WON! Congratulations!');
+            guessCheck = isGuessCorrect(goal, userGuess);
+            return;
+          }
+        }
+        alert('You have used all your ' + i + ' attempts! Loser!');
+      }
+
+    startGame();
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
