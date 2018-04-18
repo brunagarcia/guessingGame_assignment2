@@ -1,86 +1,88 @@
-// //Document ready function: $(function () {       // Function/Object to keep
-// player info       function userPerTurn(name, maxGuess) {
-// this.playerName = playerName,           this.maxGuess = maxGuess,
-// this.guessNumbers = []       }       //0 - Get user Name       function
-// getUserName() {         $("#firstButton").click(function () {
-// userPerTurn.name = $("#playerName").val();           return
-// (console.log(userPerTurn.playerName));         })       }
-// getUserName();       console.log(getUserName()); 1 - get max number from user
-function getMaxFromUser() {
-  maxGuess = prompt('Choose the maximum range of the guess?');
-  console.log('get max from user check');
-  return Number(maxGuess);
-}
+$(function () {
 
-// console.log(getMaxFromUser()); 2 - Generate random number with base on
-// userMax
-function generateRandomNumber(max, min) {
-  return Math.floor(Math.random() * (max - min)) + min;
-  // console.log('Generate random number check'); return Number(goal);
-}
+  $("#startGame")
+    .click(function () {
+      startGame();
+    })
 
-// console.log(generateRandomNumber()); 3 - Get user guess
-function getGuessFromUser() {
-  let userGuess = prompt('Choose a number between 1 to ' + maxGuess + '?');
-  console.log('Get initial guess ' + userGuess + ' check');
-  return Number(userGuess);
-}
-
-//console.log(getGuessFromUser()); 4 - Check Guess value
-function isGuessCorrect(goal, guess) {
-  // console.log(guess);
-  if (goal === guess) {
-    return true;
-  } else {
-    return false;
+  //0 - Get user Name
+  function getUserName() {
+    let name = prompt('What is your name?');
+    console.log('get user name check');
+    alert('Hello ' + name + "! Let's play a guessing game.");
+    return name;
   }
-}
 
-//----> Starting game function
-function startGame() {
-  let min = 1;
+  //1 - get max number from user
+  function getMaxFromUser() {
+    maxGuess = prompt('Choose the maximum range of the guess?');
+    if (isNaN(maxGuess)) {
+      maxGuess = prompt('Plase choose a valid number... No words!');
+    }
+    return Number(maxGuess);
+  }
 
-  //declare variables to call the functions:
-  let maxTry = 5;
-  let name = getUserName();
-  let maxGuess = getMaxFromUser();
-  let goal = generateRandomNumber(maxGuess, min);
-  let userGuess = getGuessFromUser();
-  let guessCheck = isGuessCorrect(goal, userGuess);
+  //2 - Generate random number with base on userMax
+  function generateRandomNumber(max, min) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
 
-  //Matching goal x guess
-  for (i = 0; i < maxTry; i++) {
-    guessCheck = isGuessCorrect(goal, userGuess);
-    if (goal < userGuess) {
-      userGuess = prompt('Too high, try another number');
-      // userGuess = getGuessFromUser();
-    } else if (userGuess == 0) {
-      alert("You try 0 and it's not valid. Play again!");
-      return;
-    } else if (goal > userGuess) {
-      userGuess = prompt('Too low, try another number!');
-      // userGuess = getGuessFromUser();
+  //3 - Get user guess
+  function getGuessFromUser() {
+    let userGuess = prompt('Choose a number between 1 to ' + maxGuess + '?');
+    if (isNaN(userGuess)) {
+      userGuess = prompt('You gotta type a NUMBER please! Between 1 to ' + maxGuess + '?');
+    }
+    console.log('Get initial guess ' + userGuess + ' check');
+    return Number(userGuess);
+  }
+
+  //4 - Check Guess value
+  function isGuessCorrect(goal, guess) {
+    if (goal === guess) {
+      return true;
     } else {
-      alert('You just WON! Congratulations!');
-      guessCheck = isGuessCorrect(goal, userGuess);
-      return;
+      return false;
     }
   }
-  alert('You have used all your ' + i + ' attempts! Loser!');
-}
 
-$("form")
-  .submit(function (event) {
-    if ($("input:first").val() === "correct") {
-      $("span")
-        .text("Validated...")
-        .show();
-      return;
+  //----> Starting game function
+  function startGame() {
+    let min = 1;
+
+    //declare variables to call the functions:
+    let maxTry = 5;
+    let name = getUserName();
+    let maxGuess = getMaxFromUser();
+    let goal = generateRandomNumber(maxGuess, min);
+    let userGuess = getGuessFromUser();
+    let guessCheck = isGuessCorrect(goal, userGuess);
+
+    //Matching goal x guess
+    for (i = 0; i < maxTry; i++) {
+
+      guessCheck = isGuessCorrect(goal, userGuess);
+
+      if (userGuess === 0) {
+        alert("You try 0 and it's not valid. Play again!");
+        return;
+
+      } else if (!isNaN(userGuess) && goal < userGuess) {
+        userGuess = prompt('Too high, try another number');
+
+      } else if (!isNaN(userGuess) && goal > userGuess) {
+        userGuess = prompt('Too low, try another number!');
+
+      } else if (isNaN(userGuess)) {
+        userGuess = prompt('You gotta type a NUMBEEEER!!! Try again!');
+
+      } else {
+        alert('You just WON! Congratulations!');
+        guessCheck = isGuessCorrect(goal, userGuess);
+        return;
+      }
     }
+    alert('You have used all your ' + i + ' attempts! Loser!');
+  }
 
-    $("span")
-      .text("Not valid!")
-      .show()
-      .fadeOut(1000);
-    event.preventDefault();
-  });
+})

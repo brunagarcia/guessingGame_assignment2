@@ -28,49 +28,122 @@
 <body>
 
   <!-- Form -->
-  <div class="jumbotron-fluid">
+  <header>
     <h1 class="display-4 text-center">Welcome to
-      <span class="pulse"> Guessing The Number </span> game!!</h1>
-    <div class="lead text-center">
-      <button type="button" id="startGame" class="btn btn-success">Let's Play!</button>
-    </div>
-  </div>
+      <span class="green"> Guessing The Number </span> game!!</h1>
+  </header>
 
+  <div class="jumbotron">
+    <!-- Initial Form -->
+    <form class="container justify-content-center" id="initialForm">
+
+      <div class="form-group row justify-content-center">
+        <input type="text" class="form-control col-md-4" id="userName" placeholder="Type your name here!">
+      </div>
+
+      <div class="form-group row justify-content-center">
+        <input type="text" class="form-control col-md-4" id="userMax" placeholder="Max number for range?">
+      </div>
+
+      <div class="form-group row justify-content-center">
+        <select class="custom-select custom-select-md mb-3" id="levels">
+          <option selected>Choose your difficult level:</option>
+          <option value="1">Easy Peasy</option>
+          <option value="2">Medium Mediano</option>
+          <option value="3">Hard as a Rock</option>
+        </select>
+      </div>
+
+      <div class="text-center">
+        <button type="button" id="startGame" class="btn btn-success">Let's Play!</button>
+      </div>
+
+    </form>
+
+    <!-- Guess Form -->
+    <form class="container justify-content-center" id="guessForm">
+
+      <div class="display-4" id="textDisplay">
+
+      </div>
+      <div class="form-group row justify-content-center" id="guessContainer">
+        <input type="text" class="form-control col-md-4" id="guessUser" placeholder="Guess the number here:">
+      </div>
+
+      <div class="text-center">
+        <button type="button" id="startGame" class="btn btn-success">Let's Play!</button>
+      </div>
+
+    </form>
+
+
+  </div>
 
   <script>
     $(function () {
+      // Should happen on first screen
+      $('#guessForm').hide();
 
+      // When the game starts >>> 
       $("#startGame").click(function () {
         startGame();
+
       })
 
+      //Should happen on the second screen
 
       //0 - Get user Name
+      // get user name from id userName jquery
       function getUserName() {
-        let name = prompt('What is your name?');
-        console.log('get user name check');
-        alert('Hello ' + name + "! Let's play a guessing game.");
+        let name = $('#userName').val();
+        $("#textDisplay").append(`<h2 class='row justify-content-center'> Hello ${name}! </h2>`);
+        console.log(`${name} check!`);
+        $('#initialForm').hide();
+        $('#guessForm').show();
         return name;
       }
 
-      //1 - get max number from user
+      //1 - Choose level of difficult.
+      function chooseDifficult() {
+        console.log("Choose level of difficult.")
+        let level = Number($('#levels').val())
+        let maxTry;
+        if (level === 1) {
+          return 10;
+
+        } else if (level === 2) {
+          return 8;
+
+        } else if (level === 2) {
+          return 5;
+        }
+      }
+
+      //2 - get max number from user
       function getMaxFromUser() {
-        maxGuess = prompt('Choose the maximum range of the guess?');
+        console.log("get max number from user")
+        maxGuess = $('#userMax').val();
+        $("#textDisplay").append(`<h2 class='row justify-content-center'> 
+                                  Guess a number between <span class="orange"> 1 </span>
+                                  and <span class="orange"> ${maxGuess}</span></h2>`);
         if (isNaN(maxGuess)) {
-          maxGuess = prompt('Plase choose a valid number... No words!');
+          $('#guessContainer').append(`<p> Please </p>`);
         }
         return Number(maxGuess);
       }
 
-      //2 - Generate random number with base on userMax
+      //3 - Generate random number with base on userMax
       function generateRandomNumber(max, min) {
+        console.log("Generate random number with base on userMax")
         return Math.floor(Math.random() * (max - min)) + min;
       }
 
       //3 - Get user guess
       function getGuessFromUser() {
-        let userGuess = prompt('Choose a number between 1 to ' + maxGuess + '?');
+        console.log("Get user guess")
+        let userGuess = $("#guessUser").val();
         if (isNaN(userGuess)) {
+
           userGuess = prompt('You gotta type a NUMBER please! Between 1 to ' + maxGuess + '?');
         }
         console.log('Get initial guess ' + userGuess + ' check');
@@ -79,51 +152,54 @@
 
       //4 - Check Guess value
       function isGuessCorrect(goal, guess) {
-        if (goal === guess) {
-          return true;
-        } else {
-          return false;
-        }
+        // if (goal === guess) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
       }
 
       //----> Starting game function
       function startGame() {
+        console.log("Start Game Func running...")
         let min = 1;
 
         //declare variables to call the functions:
-        let maxTry = 5;
         let name = getUserName();
+        let maxTry = chooseDifficult();
         let maxGuess = getMaxFromUser();
         let goal = generateRandomNumber(maxGuess, min);
         let userGuess = getGuessFromUser();
         let guessCheck = isGuessCorrect(goal, userGuess);
 
         //Matching goal x guess
-        for (i = 0; i < maxTry; i++) {
-          
-          guessCheck = isGuessCorrect(goal, userGuess);
+        //   for (i = 0; i < maxTry; i++) {
 
-          if (!isNaN(userGuess) && goal < userGuess) {
-            userGuess = prompt('Too high, try another number');
+        //     guessCheck = isGuessCorrect(goal, userGuess);
 
-          } else if (userGuess === 0) {
-            alert("You try 0 and it's not valid. Play again!");
-            return;
-          } else if (!isNaN(userGuess) && goal > userGuess) {
-            userGuess = prompt('Too low, try another number!');
+        //     if (userGuess === 0) {
+        //       alert("You try 0 and it's not valid. Play again!");
+        //       return;
 
-          } else if (isNaN(userGuess)) {
-            userGuess = prompt('You gotta type a NUMBEEEER!!! Try again!');
+        //     } else if (!isNaN(userGuess) && goal < userGuess) {
+        //       // userGuess = prompt('Too high, try another number');
 
-          } else {
-            alert('You just WON! Congratulations!');
-            guessCheck = isGuessCorrect(goal, userGuess);
-            return;
-          }
-        }
-        alert('You have used all your ' + i + ' attempts! Loser!');
+        //     } else if (!isNaN(userGuess) && goal > userGuess) {
+        //       // userGuess = prompt('Too low, try another number!');
+
+        //     } else if (isNaN(userGuess)) {
+        //       // userGuess = prompt('You gotta type a NUMBEEEER!!! Try again!');
+
+        //     } else {
+        //       alert('You just WON! Congratulations!');
+        //       guessCheck = isGuessCorrect(goal, userGuess);
+        //       return;
+        //     }
+        //   }
+        //   alert('You have used all your ' + i + ' attempts! Loser!');
+        // }
+
       }
-
     })
   </script>
 
