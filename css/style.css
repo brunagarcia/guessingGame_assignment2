@@ -45,3 +45,20 @@ header{
 .custom-select{
   width: 30%;
 }
+
+#alert{
+  color: rgb(255, 255, 255);
+}
+
+#alert2{
+  color: rgb(255, 255, 255);
+}
+
+#alertHigh{
+  color: rgb(255, 255, 255);
+}
+
+#alertLow{
+  color: rgb(255, 255, 255);
+}
+
